@@ -11,9 +11,10 @@ const app = express();
 app.use(express.json());
 
 app.use((req, res, next) => {
-  console.log(req.path, req.method);
+  console.log('Request Path: ', req.path);
+  console.log('Request Method: ', req.method);
   res.on("finish", () => {
-    console.log(res.statusCode);
+    console.log('Status Code: ', res.statusCode);
   });
   next();
 });

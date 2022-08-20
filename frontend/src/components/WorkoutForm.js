@@ -1,18 +1,22 @@
 import { useState } from "react";
 import { useWorkoutsContext } from "../hooks/useWorkoutsContext";
+import { useFormHandler } from "../hooks/useFormHandler";
 
 const WorkoutForm = () => {
+  const formDefinition = {
+    title: '',
+    load: 0,
+    reps: 0
+  };  
   const { dispatch } = useWorkoutsContext();
-  const [title, setTitle] = useState('');
-  const [load, setLoad] = useState('');
-  const [reps, setReps] = useState('');
+  const {formObject:formData, setFormField, resetFormObject} = useFormHandler(formDefinition);
   const [error, setError] = useState(null);
   const [emptyFields, setEmptyFields] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const workout = {title, load, reps};
+    const workout = formData;
 
     const response = await fetch('/api/workouts', {
       method:'POST',
@@ -28,16 +32,14 @@ const WorkoutForm = () => {
       setError(json.error);
       setEmptyFields(json.emptyFields);
     }
+
     if(response.ok){
       setError(null);
-      setEmptyFields([])
-      setTitle('');
-      setLoad('');
-      setReps('');
+      setEmptyFields([]);
+      resetFormObject();
       dispatch({type: 'CREATE_WORKOUT', payload: json});
       console.log('new workout added', json);
     }
-
   };
 
   return (
@@ -49,8 +51,8 @@ const WorkoutForm = () => {
         type="text"
         name="title"
         id="title"
-        onChange={(e) => setTitle(e.target.value)}
-        value={title}
+        onChange={setFormField}
+        value={formData.title}
         className={emptyFields.includes('title') ? "error" : ""}
       />
 
@@ -59,8 +61,8 @@ const WorkoutForm = () => {
         type="number"
         name="load"
         id="load"
-        onChange={(e) => setLoad(e.target.value)}
-        value={load}
+        onChange={setFormField}
+        value={formData.load}
         className={emptyFields.includes('load') ? "error" : ""}
       />
 
@@ -69,8 +71,8 @@ const WorkoutForm = () => {
         type="number"
         name="reps"
         id="reps"
-        onChange={(e) => setReps(e.target.value)}
-        value={reps}
+        onChange={setFormField}
+        value={formData.reps}
         className={emptyFields.includes('reps') ? "error" : ""}
       />
 

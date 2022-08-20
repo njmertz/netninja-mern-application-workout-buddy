@@ -1,0 +1,23 @@
+{
+  "name": "mern-workouts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm run start\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/njmertz/netninja-mern-application-workout-buddy.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/njmertz/netninja-mern-application-workout-buddy/issues"
+  },
+  "homepage": "https://github.com/njmertz/netninja-mern-application-workout-buddy#readme",
+  "dependencies": {
+    "concurrently": "^7.3.0"
+  }
+}

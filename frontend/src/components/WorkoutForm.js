@@ -1,26 +1,20 @@
 import { useState } from "react";
+import { useFormDataHandler } from "../hooks/useFormDataHandler";
 import { useWorkoutsContext } from "../hooks/useWorkoutsContext";
-import { useFormHandler } from "../hooks/useFormHandler";
+import TextInput from "./forms/TextInput";
 
-const WorkoutForm = () => {
-  const formDefinition = {
-    title: '',
-    load: 0,
-    reps: 0
-  };  
+const WorkoutForm = () => { 
   const { dispatch } = useWorkoutsContext();
-  const {formObject:formData, setFormField, resetFormObject} = useFormHandler(formDefinition);
+  const { formData, setFormDataProperty, resetFormData } = useFormDataHandler();
   const [error, setError] = useState(null);
   const [emptyFields, setEmptyFields] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const workout = formData;
-
     const response = await fetch('/api/workouts', {
       method:'POST',
-      body: JSON.stringify(workout),
+      body: JSON.stringify(formData),
       headers: {
         'Content-Type': 'application/json'
       }
@@ -36,7 +30,7 @@ const WorkoutForm = () => {
     if(response.ok){
       setError(null);
       setEmptyFields([]);
-      resetFormObject();
+      resetFormData();
       dispatch({type: 'CREATE_WORKOUT', payload: json});
       console.log('new workout added', json);
     }
@@ -46,34 +40,31 @@ const WorkoutForm = () => {
     <form className="create" onSubmit={handleSubmit}>
       <h3>Add a New Workout</h3>
 
-      <label htmlFor="title">Exercise Title:</label>
-      <input
-        type="text"
-        name="title"
-        id="title"
-        onChange={setFormField}
-        value={formData.title}
-        className={emptyFields.includes('title') ? "error" : ""}
+      <TextInput
+        fieldType="text"
+        fieldName="title"
+        fieldLabel="Exercise Title:"
+        fieldValue={formData.title ?? ''}
+        eventHandler={setFormDataProperty}
+        fieldClasses={emptyFields.includes('title') ? "error" : ""}
       />
 
-      <label htmlFor="load">Load (in kg):</label>
-      <input
-        type="number"
-        name="load"
-        id="load"
-        onChange={setFormField}
-        value={formData.load}
-        className={emptyFields.includes('load') ? "error" : ""}
+      <TextInput
+        fieldType="text"
+        fieldName="load"
+        fieldLabel="Load (in kg):"
+        fieldValue={formData.load ?? 0}
+        eventHandler={setFormDataProperty}
+        fieldClasses={emptyFields.includes('load') ? "error" : ""}
       />
 
-      <label htmlFor="reps">Reps:</label>
-      <input
-        type="number"
-        name="reps"
-        id="reps"
-        onChange={setFormField}
-        value={formData.reps}
-        className={emptyFields.includes('reps') ? "error" : ""}
+      <TextInput
+        fieldType="text"
+        fieldName="reps"
+        fieldLabel="Reps:"
+        fieldValue={formData.reps ?? 0}
+        eventHandler={setFormDataProperty}
+        fieldClasses={emptyFields.includes('reps') ? "error" : ""}
       />
 
       <button>Add Workout</button>

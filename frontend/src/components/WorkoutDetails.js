@@ -1,12 +1,16 @@
 import { useWorkoutsContext } from '../hooks/useWorkoutsContext';
+import { useModalContext } from '../hooks/useModalContext';
 
 // date fns
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 
+import EditWorkoutForm from './EditWorkoutForm';
+
 const WorkoutDetails = ({ workout }) => {
   const { dispatch } = useWorkoutsContext();
+  const { dispatch:modalDispatch } = useModalContext();
 
-  const handleClick = async () => {
+  const handleDelete = async () => {
     const response = await fetch('/api/workouts/'+workout._id, {
       method: 'DELETE'
     });
@@ -17,13 +21,24 @@ const WorkoutDetails = ({ workout }) => {
     }
   }
 
+  const triggerModal = () => {
+    modalDispatch({
+      type: 'OPEN_MODAL',
+      payload: {
+        modalContent:<EditWorkoutForm workout={workout} />,
+      }
+    });
+  }
+
   return (
     <div className="workout-details">
       <h4>{workout.title}</h4>
       <p><strong>Load (kg): </strong>{workout.load}</p>
       <p><strong>Reps: </strong>{workout.reps}</p>
-      <p>{formatDistanceToNow(new Date(workout.createdAt), { addSuffix: true })}</p>
-      <span onClick={handleClick} className="material-symbols-outlined">delete</span>
+      <p><strong>Created: </strong>{formatDistanceToNow(new Date(workout.createdAt), { addSuffix: true })}</p>
+      <p><strong>Last Updated: </strong>{formatDistanceToNow(new Date(workout.updatedAt), { addSuffix: true })}</p>
+      <span onClick={triggerModal} className="material-symbols-outlined">edit</span>
+      <span onClick={handleDelete} className="material-symbols-outlined">delete</span>
     </div>
   );
 };

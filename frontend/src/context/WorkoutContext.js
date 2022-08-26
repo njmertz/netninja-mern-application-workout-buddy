@@ -12,12 +12,18 @@ export const workoutsReducer = (state, action) => {
       return {
         workouts: [action.payload, ...state.workouts]
       }
+    case 'UPDATE_WORKOUT':
+      const itemIndex = state.workouts.findIndex(workout => workout._id === action.payload._id);
+      state.workouts[itemIndex] = {...state.workouts[itemIndex], ...action.payload};
+      return {
+        workouts: state.workouts
+      };
     case 'DELETE_WORKOUT':
       return {
         workouts: state.workouts.filter((workout) => workout._id !== action.payload._id)
       }
     default:
-      return state
+      return state;
   }
 };
 

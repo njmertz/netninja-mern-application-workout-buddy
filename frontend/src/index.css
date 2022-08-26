@@ -58,13 +58,21 @@ header a {
 }
 .workout-details span {
   position: absolute;
-  top: 20px;
-  right: 20px;
+  right:20px;
   cursor: pointer;
-  background: #f1f1f1;
   padding: 6px;
   border-radius: 50%;
-  color: #333;
+  color: #f1f1f1;
+}
+
+.workout-details span {
+  top:20px;
+  background: var(--primary);
+}
+
+.workout-details span + span{
+  top:70px;
+  background: var(--error);
 }
 
 /* new workout form */
@@ -99,4 +107,48 @@ div.error {
 }
 input.error {
   border: 1px solid var(--error);
+}
+/* Modal */
+.modal-overlay{
+  background:rgba(0,0,0,0.8);
+  bottom:0;
+  display:grid;
+  left:0;
+  position:fixed;
+  top:0;
+  transition:all .6s ease;
+  width:100%;
+}
+.modal-overlay.modal-closed{
+  height:0;
+  opacity:0;
+  z-index:-1;
+}
+.modal-overlay.modal-open{
+  height:100%;
+  opacity:1;
+  z-index:10000;
+}
+.modal-container{
+  background:#FFF;
+  border:8px solid #000;
+  border-radius:8px;
+  box-shadow:0 0 10px rgba(0,0,0,0.8);
+  margin:auto;
+  max-width:1024px;
+  padding:10px;
+  position:relative;
+  width:80%;
+}
+.modal-container .close-modal-button{
+  background:#000;
+  border-radius:50%;
+  border:5px solid #000;
+  box-shadow:5px 0 10px rgba(0,0,0,0.8);
+  color:#FFF;
+  cursor:pointer;
+  font-weight:600;
+  position:absolute;
+  right:-20px;
+  top:-20px;
 }
